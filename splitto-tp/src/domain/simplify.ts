@@ -14,6 +14,13 @@ function findLargestCreditor(creditors: Array<{ id: string; balance: number }>):
   return creditors.reduce((max, current) => current.balance > max.balance ? current : max);
 }
 
+function removeSettledParty(parties: Array<{ id: string; balance: number }>, party: { id: string; balance: number }): void {
+  const index = parties.indexOf(party);
+  if (index > -1) {
+    parties.splice(index, 1);
+  }
+}
+
 export function simplifyDebts(balances: { [memberId: string]: number }): Settlement[] {
   const settlements: Settlement[] = [];
   
@@ -40,8 +47,8 @@ export function simplifyDebts(balances: { [memberId: string]: number }): Settlem
     debtor.balance += amount;
     creditor.balance -= amount;
     
-    if (debtor.balance === 0) debtors.splice(debtors.indexOf(debtor), 1);
-    if (creditor.balance === 0) creditors.splice(creditors.indexOf(creditor), 1);
+    if (debtor.balance === 0) removeSettledParty(debtors, debtor);
+    if (creditor.balance === 0) removeSettledParty(creditors, creditor);
   }
   
   return settlements;
