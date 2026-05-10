@@ -22,4 +22,9 @@ describe('simplifyDebts', () => {
     const result = simplifyDebts({});
     expect(result).toEqual([]);
   });
+
+  it('should return empty array when all members are balanced', () => {
+    const result = simplifyDebts({ a: 0, b: 0, c: 0 });
+    expect(result).toEqual([]);
+  });
 });
