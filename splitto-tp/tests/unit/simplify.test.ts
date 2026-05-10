@@ -27,4 +27,10 @@ describe('simplifyDebts', () => {
     const result = simplifyDebts({ a: 0, b: 0, c: 0 });
     expect(result).toEqual([]);
   });
+  it('should handle multiple debtors and creditors', () => {
+    const result = simplifyDebts({ a: 20, b: 10, c: -15, d: -15 });
+    expect(result).toHaveLength(2);
+    expect(result.some(s => s.amount === 15)).toBe(true);
+    expect(result.some(s => s.amount === 20)).toBe(true);
+  });
 });
