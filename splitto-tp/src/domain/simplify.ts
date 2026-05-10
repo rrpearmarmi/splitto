@@ -7,16 +7,33 @@ export type Settlement = {
 export function simplifyDebts(balances: { [memberId: string]: number }): Settlement[] {
   const settlements: Settlement[] = [];
   
-  const entries = Object.entries(balances);
-  const creditor = entries.find(([_, balance]) => balance > 0);
-  const debtor = entries.find(([_, balance]) => balance < 0);
+ 
+  const debtors = Object.entries(balances)
+    .filter(([_, b]) => b < 0)
+    .map(([id, b]) => ({ id, balance: b }));
   
-  if (creditor && debtor) {
+  const creditors = Object.entries(balances)
+    .filter(([_, b]) => b > 0)
+    .map(([id, b]) => ({ id, balance: b }));
+  
+  
+  while (debtors.length > 0 && creditors.length > 0) {
+    const debtor = debtors[0];
+    const creditor = creditors[0];
+    
+    const amount = Math.min(-debtor.balance, creditor.balance);
+    
     settlements.push({
-      from: debtor[0],
-      to: creditor[0],
-      amount: creditor[1]
+      from: debtor.id,
+      to: creditor.id,
+      amount
     });
+    
+    debtor.balance += amount;
+    creditor.balance -= amount;
+    
+    if (debtor.balance === 0) debtors.shift();
+    if (creditor.balance === 0) creditors.shift();
   }
   
   return settlements;
