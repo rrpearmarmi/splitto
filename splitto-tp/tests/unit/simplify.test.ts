@@ -6,4 +6,9 @@ describe('simplifyDebts', () => {
     const result = simplifyDebts({ a: 10, b: -10 });
     expect(result).toEqual([{ from: 'b', to: 'a', amount: 10 }]);
   });
+
+  it('should handle 3 people in triangle (skip intermediate)', () => {
+    const result = simplifyDebts({ a: 10, b: 0, c: -10 });
+    expect(result).toEqual([{ from: 'c', to: 'a', amount: 10 }]);
+  });
 });
