@@ -18,4 +18,8 @@ describe('simplifyDebts', () => {
     expect(result).toContainEqual({ from: 'b', to: 'a', amount: 20 });
     expect(result).toContainEqual({ from: 'c', to: 'a', amount: 10 });
   });
+  it('should return empty array for empty balances', () => {
+    const result = simplifyDebts({});
+    expect(result).toEqual([]);
+  });
 });
